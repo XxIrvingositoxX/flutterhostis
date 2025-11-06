@@ -48,8 +48,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final messages = chat.messages;
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-
-    // Banner grande de estado
     // final isOk = chat.health == HealthStatus.ok;
     // final isLoading = chat.health == HealthStatus.loading;
 

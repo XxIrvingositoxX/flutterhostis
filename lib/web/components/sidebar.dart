@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_game_app/web/components/header.dart';
 import 'package:flutter_game_app/web/views/chat_bot_view.dart';
 import 'package:flutter_game_app/web/views/home_view.dart';
+import 'package:flutter_game_app/web/views/secret_codes_view.dart';
+import 'package:flutter_game_app/web/views/wikipedia_view.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -71,6 +73,9 @@ class _SidebarState extends State<Sidebar> {
               MaterialPageRoute<void>(
                 builder: (context) => Header(title: 'Wikipedia'),
               );
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => const WikipediaView()),
+              );
             },
           ),
           ListTile(
@@ -87,16 +92,33 @@ class _SidebarState extends State<Sidebar> {
           ),
           ListTile(
             leading: const Icon(Icons.assistant),
-            title: const Text('Chat Bot'),
+            title: const Text('Habla con Rake'),
             selected: _selectedIndex == 3,
             onTap: () {
               _onItemTapped(3);
               Navigator.pop(context);
               MaterialPageRoute<void>(
-                builder: (context) => Header(title: 'ChatBot'),
+                builder: (context) => Header(title: 'Preguntar a Rake'),
               );
               Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (context) => const ChatBot()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.redeem),
+            title: const Text('Canjea un codigo'),
+            selected: _selectedIndex == 4,
+            onTap: () {
+              _onItemTapped(4);
+              Navigator.pop(context);
+              MaterialPageRoute<void>(
+                builder: (context) => Header(title: 'Canjea un codigo'),
+              );
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const SecretCodesView(),
+                ),
               );
             },
           ),

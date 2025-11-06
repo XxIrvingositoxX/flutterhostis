@@ -23,7 +23,6 @@ class ChatController extends ChangeNotifier {
     final ok = await _repo.health();
     _health = ok ? HealthStatus.ok : HealthStatus.down;
 
-    // Mensaje grande dinámico al iniciar (solo UI)
     if (ok) {
       _messages.add(
         ChatMessage(
@@ -48,16 +47,13 @@ class ChatController extends ChangeNotifier {
     final trimmed = text.trim();
     if (trimmed.isEmpty || _isSending) return;
 
-    // 1) CAPTURA el historial ANTES de agregar el mensaje actual
     final priorHistory = List<ChatMessage>.from(_messages);
 
-    // 2) Pinta el mensaje del usuario en la UI
     _messages.add(ChatMessage(role: ChatRole.user, text: trimmed));
     _isSending = true;
     notifyListeners();
 
     try {
-      // 3) Envía message + history(previo)
       final reply = await _repo.sendChat(
         message: trimmed,
         history: priorHistory,
@@ -65,16 +61,15 @@ class ChatController extends ChangeNotifier {
       _messages.add(
         ChatMessage(
           role: ChatRole.bot,
-          text: reply.isEmpty
-              ? 'No recibí contenido de la API.'
-              : reply, // <- antes era '...'
+          text: reply.isEmpty ? 'No recibí contenido de la API.' : reply,
         ),
       );
     } catch (e) {
       _messages.add(
         ChatMessage(
           role: ChatRole.bot,
-          text: 'Hubo un problema al conectar con el chat. ${e.toString()}',
+          text:
+              'Ops!, Parece que rake se perdio en el abismo, intenta mas tarde.',
         ),
       );
     } finally {

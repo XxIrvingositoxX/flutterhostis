@@ -9,7 +9,7 @@ import '../../core/api_client.dart';
 
 class ChatBot extends StatelessWidget {
   const ChatBot({super.key});
-  final String title = "Chat Bot";
+  final String title = "Habla con Rake";
 
   @override
   Widget build(BuildContext context) {

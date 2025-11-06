@@ -2,8 +2,20 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
-  const Header({super.key, required this.title});
+  const Header({
+    super.key,
+    required this.title,
+    this.onNotificationsTap,
+    this.notificationCount,
+  });
+
   final String title;
+
+  /// Callback opcional al tocar el ícono de notificaciones
+  final VoidCallback? onNotificationsTap;
+
+  /// Número opcional para mostrar en el badge (si es > 0 se muestra)
+  final int? notificationCount;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -21,6 +33,20 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       centerTitle: true,
+      actions: [
+        IconButton(
+          tooltip: 'Notificaciones',
+          onPressed: onNotificationsTap,
+          icon: (notificationCount != null && notificationCount! > 0)
+              ? Badge(
+                  alignment: Alignment.topRight,
+                  label: Text('${notificationCount!}'),
+                  child: const Icon(Icons.notifications_outlined),
+                )
+              : const Icon(Icons.notifications_outlined),
+        ),
+        const SizedBox(width: 8),
+      ],
     );
   }
 }

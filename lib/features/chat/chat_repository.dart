@@ -32,33 +32,18 @@ class ChatRepository {
       }).toList(),
     };
 
-    // DEBUG opcional:
-    // print('POST /chat body => $body');
-
     final Response res = await api.dio.post('/chat', data: body);
-
-    // DEBUG opcional:
-    // print('RES /chat => ${res.statusCode} ${res.data}');
 
     final data = res.data;
     return _extractReply(data).trim();
   }
 
-  /// Acepta varias formas de respuesta:
-  /// { "message": "..." }
-  /// { "content": "..." }
-  /// { "reply": "..." }
-  /// { "text": "..." }
-  /// { "data": { "message": "..." } }
-  /// { "choices":[{"message":{"content":"..."}}] } (estilo OpenAI)
-  /// ["...", "..."] o cualquier string directo
   String _extractReply(dynamic data) {
     if (data == null) return '';
 
     if (data is String) return data;
 
     if (data is List) {
-      // Si devuelve lista, intenta primer string comprensible
       for (final item in data) {
         final s = _extractReply(item);
         if (s.isNotEmpty) return s;
@@ -67,19 +52,16 @@ class ChatRepository {
     }
 
     if (data is Map) {
-      // claves directas comunes
       for (final key in ['message', 'content', 'reply', 'text', 'answer']) {
         final v = data[key];
         if (v is String && v.trim().isNotEmpty) return v;
       }
 
-      // anidado en "data"
       if (data['data'] != null) {
         final nested = _extractReply(data['data']);
         if (nested.isNotEmpty) return nested;
       }
 
-      // estilo OpenAI
       final choices = data['choices'];
       if (choices is List && choices.isNotEmpty) {
         final c0 = choices.first;
@@ -92,7 +74,6 @@ class ChatRepository {
         }
       }
 
-      // última oportunidad: busca cualquier String no vacío en valores
       for (final v in data.values) {
         final s = _extractReply(v);
         if (s.isNotEmpty) return s;

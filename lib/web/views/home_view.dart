@@ -1,157 +1,289 @@
-// lib/web/views/home_view.dart
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_game_app/web/components/header.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_game_app/web/components/sidebar.dart';
 import 'package:flutter_game_app/web/components/image_carousel.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class HomeView extends StatelessWidget {
+  HomeView({super.key});
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
+  final String title = 'HOSTIS AETERNUS';
+  final String description =
+      'Adéntrate en un entorno oscuro y siniestro donde descubrirás los secretos que acechan en las sombras. Explora, sobrevive y descubre la verdad oculta detrás de la historia de Jack.';
 
-class _HomeViewState extends State<HomeView> {
-  final String text = 'Welcome to Shadow Of Mind';
-  final String buttomText = 'Ir a la Wiki';
-  final String shortDescription =
-      'Adéntrate en un entorno oscuro y siniestro donde conocerás los secretos que acechan en las sombras. '
-      'Explora, sobrevive y descubre la verdad oculta detrás de la historia de {nombre_del_personaje}.';
-  final String carouselTitle = 'Explore the Darkness';
+  final String carouselTitle = 'Explora la Oscuridad';
   final String carouselDescription =
-      'Dive into the shadows with our curated selection of images that capture the eerie and captivating atmosphere of Shadow Of Mind. '
-      'From abandoned streets to haunting interiors, each image tells a story of mystery and suspense.';
+      '“Sumérgete en las sombras con nuestra selección curada de imágenes que capturan la atmósfera inquietante y cautivadora de Hostis Aeternus. Desde paisajes desolados hasta encuentros espeluznantes, cada imagen te invita a descubrir los misterios que aguardan en cada rincón oscuro del juego.”';
 
-  @override
-  void initState() {
-    super.initState();
-    // Precargar imágenes para evitar tirones al mostrarlas
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      precacheImage(
-        const AssetImage('assets/images/home/home_dark_street.jpg'),
-        context,
-      );
-      precacheImage(
-        const AssetImage('assets/images/home/home_white_cell.jpg'),
-        context,
-      );
-      precacheImage(
-        const AssetImage('assets/images/home/home_basement.jpg'),
-        context,
-      );
-    });
-  }
+  final List<String> imageUrls = [
+    'assets/images/home/group.jpg',
+    'assets/images/home/group2.jpg',
+    'assets/images/home/group3.jpg',
+    'assets/images/home/boyred.jpg',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    const darkRed = Color.fromARGB(255, 44, 4, 4);
-
     return Scaffold(
-      appBar: const Header(title: 'Home'),
       drawer: const Sidebar(),
-      body: DecoratedBox(
-        // Fondo optimizado (sin Opacity sobre Image)
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/home/home_dark_street.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              // Hero centrado
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 32,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(height: 8),
-                    Text(
-                      text,
-                      style: const TextStyle(color: Colors.white, fontSize: 23),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 15),
-                    Text(
-                      shortDescription,
-                      style: const TextStyle(color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () {
-                        // TODO: navegar a la Wiki
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: darkRed,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 15,
-                        ),
-                        elevation: 6,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        buttomText,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+      body: Stack(
+        children: [
+          // Fondo oscuro con imagen
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/home/boy.jpg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
               ),
-
-              // Carrusel + descripción
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  spacing: 20,
-                  children: <Widget>[
-                    Text(
-                      carouselTitle,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23.0,
+            ),
+          ),
+          // Contenido scrollable
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Ícono de menú hamburguesa manual
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Builder(
+                      builder: (context) => IconButton(
+                        icon: const Icon(Icons.menu, color: Colors.white),
+                        onPressed: () => Scaffold.of(context).openDrawer(),
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                    // TIP: si controlas AutoCarouselSlider, dentro usa Image.asset(..., cacheWidth: (ancho*dpr).round())
-                    const AutoCarouselSlider(
-                      imageUrls: [
-                        'assets/images/home/home_basement.jpg',
-                        'assets/images/home/home_dark_street.jpg',
-                        'assets/images/home/home_white_cell.jpg',
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Título principal
+                  Text(
+                    title,
+                    style: GoogleFonts.cinzelDecorative(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Descripción
+                  Text(
+                    description,
+                    style: GoogleFonts.roboto(
+                      color: Colors.grey[300],
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Botón púrpura
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/wiki');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 44, 4, 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 8,
+                    ),
+                    child: Text(
+                      'Go to Wiki',
+                      style: GoogleFonts.roboto(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  
+                  // Sección: Explore the Darkness
+                  Text(
+                    carouselTitle,
+                    style: GoogleFonts.cinzel(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _glassContainer(
+                    child: Column(
+                      children: [
+                        const AutoCarouselSlider(
+                          imageUrls: [
+                            'assets/images/home/group.jpg',
+                            'assets/images/home/group2.jpg',
+                            'assets/images/home/group3.jpg',
+                            'assets/images/home/boyred.jpg',
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            carouselDescription,
+                            style: GoogleFonts.roboto(
+                              color: Colors.grey[300],
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ],
                     ),
-                    Text(
-                      carouselDescription,
-                      style: const TextStyle(color: Colors.grey),
-                      textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/secret_codes'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 44, 4, 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                    child: Text(
+                      'Canjear código',
+                      style: GoogleFonts.roboto(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
 
-              // Sección extra (rating, etc.)
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: const <Widget>[
-                    // Aca va el rating y todo eso
-                  ],
-                ),
+                  // Noticias/Eventos
+                  Text(
+                    "Últimas Noticias",
+                    style: GoogleFonts.cinzel(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _glassContainer(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(
+                            Icons.newspaper,
+                            color: Colors.purpleAccent,
+                          ),
+                          title: Text(
+                            "Evento especial de Halloween",
+                            style: GoogleFonts.roboto(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            "Explora nuevas misiones y códigos ocultos.",
+                            style: GoogleFonts.roboto(color: Colors.grey[300]),
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.update,
+                            color: Colors.purpleAccent,
+                          ),
+                          title: Text(
+                            "Nueva actualización 1.2",
+                            style: GoogleFonts.roboto(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            "Corrección de bugs y mejoras visuales.",
+                            style: GoogleFonts.roboto(color: Colors.grey[300]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Sección: Features
+                  Text(
+                    'Características',
+                    style: GoogleFonts.cinzel(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Wrap(
+                    spacing: 20,
+                    runSpacing: 20,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      _featureCard(Icons.star, 'Puntuación', '4.8/5'),
+                      _featureCard(
+                        Icons.people,
+                        'Jugadores',
+                        'Modo de un solo jugador',
+                      ),
+                      _featureCard(Icons.lock, 'Secretos', 'Lore oculto'),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  // Glassmorphism container
+  Widget _glassContainer({required Widget child}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white24),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  // Tarjetas de características
+  Widget _featureCard(IconData icon, String title, String subtitle) {
+    return _glassContainer(
+      child: Container(
+        width: 160,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(icon, color: Color.fromARGB(255, 44, 4, 4), size: 40),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: GoogleFonts.cinzel(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              subtitle,
+              style: GoogleFonts.roboto(color: Colors.grey[300], fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );

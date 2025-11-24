@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_game_app/web/views/home_view.dart';
+import 'package:flutter_game_app/web/views/wikipedia_view.dart';
+import 'package:flutter_game_app/web/views/secret_codes_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Game',
+      title: 'Shadow Of Mind Wiki',
       theme: ThemeData(
         colorScheme: ColorScheme.dark(
           primary: const Color.fromARGB(255, 44, 4, 4),
@@ -16,7 +18,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Witchwoode',
       ),
-      home: const HomeView(),
+      routes: {
+        '/wiki': (context) =>WikipediaView(),
+        '/secret_codes': (context) =>SecretCodesView()
+      },
+      home: HomeView(),
     );
   }
 }

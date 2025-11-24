@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_game_app/web/components/header.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_game_app/web/components/sidebar.dart';
 
-// Datos ficticios (6 personajes). Usa la misma imagen para todos por ahora.
 final List<Map<String, dynamic>> data = [
   {
-    'name': 'Aster',
+    'name': 'Boy',
     'level': 1,
-    'image': 'assets/images/home/home_white_cell.jpg',
+    'image': 'assets/images/home/boychild.jpg',
     'description':
         'Un explorador silencioso que prefiere los pasillos estrechos. '
         'Su instinto rara vez falla cuando hay peligro cerca.',
@@ -15,7 +14,7 @@ final List<Map<String, dynamic>> data = [
   {
     'name': 'Nyx',
     'level': 2,
-    'image': 'assets/images/home/home_white_cell.jpg',
+    'image': 'assets/images/home/enemy1.jpg',
     'description':
         'Conoce cada rincón del sanatorio. Domina el sigilo y deja señales '
         'ocultas para quienes saben mirar.',
@@ -23,7 +22,7 @@ final List<Map<String, dynamic>> data = [
   {
     'name': 'Raven',
     'level': 3,
-    'image': 'assets/images/home/home_white_cell.jpg',
+    'image': 'assets/images/home/enemy2.jpg',
     'description':
         'Líder nato con un pasado que nadie se atreve a mencionar. '
         'Su presencia impone respeto en la oscuridad.',
@@ -31,7 +30,7 @@ final List<Map<String, dynamic>> data = [
   {
     'name': 'Mora',
     'level': 1,
-    'image': 'assets/images/home/home_white_cell.jpg',
+    'image': 'assets/images/home/enemy3.jpg',
     'description':
         'Analítica y metódica. Recolecta pistas y fragmentos de memoria '
         'para recomponer la verdad.',
@@ -39,7 +38,7 @@ final List<Map<String, dynamic>> data = [
   {
     'name': 'Kael',
     'level': 2,
-    'image': 'assets/images/home/home_white_cell.jpg',
+    'image': 'assets/images/home/enemy4.jpg',
     'description':
         'Errante y esquivo. Dicen que puede escuchar las paredes cuando '
         'susurra el viento frío.',
@@ -47,7 +46,7 @@ final List<Map<String, dynamic>> data = [
   {
     'name': 'Umbra',
     'level': 3,
-    'image': 'assets/images/home/home_white_cell.jpg',
+    'image': 'assets/images/home/enemy5.jpg',
     'description':
         'La sombra detrás del mito. Se mueve con precisión quirúrgica, '
         'y nadie sabe qué persigue realmente.',
@@ -75,14 +74,8 @@ class _WikipediaViewState extends State<WikipediaView> {
 
     // Precarga de assets que se usan como fondo y tarjetas
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      precacheImage(
-        const AssetImage('assets/images/home/home_dark_street.jpg'),
-        context,
-      );
-      precacheImage(
-        const AssetImage('assets/images/home/home_white_cell.jpg'),
-        context,
-      );
+      precacheImage(const AssetImage('assets/images/home/boy.jpg'), context);
+      precacheImage(const AssetImage('assets/images/home/boy.jpg'), context);
     });
   }
 
@@ -187,11 +180,10 @@ class _WikipediaViewState extends State<WikipediaView> {
                                 child: Text(
                                   item['name'],
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: GoogleFonts.cinzelDecorative(
                                     color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.5,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
@@ -209,10 +201,10 @@ class _WikipediaViewState extends State<WikipediaView> {
                                   Expanded(
                                     child: Text(
                                       item['name'],
-                                      style: const TextStyle(
+                                      style: GoogleFonts.cinzelDecorative(
                                         color: Colors.white,
                                         fontSize: 20,
-                                        fontWeight: FontWeight.w700,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
@@ -222,9 +214,9 @@ class _WikipediaViewState extends State<WikipediaView> {
                               const SizedBox(height: 8),
                               Text(
                                 item['description'],
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  height: 1.35,
+                                style: GoogleFonts.roboto(
+                                  color: Colors.white,
+                                  fontSize: 15,
                                 ),
                               ),
                               const SizedBox(height: 14),
@@ -261,101 +253,161 @@ class _WikipediaViewState extends State<WikipediaView> {
 
   @override
   Widget build(BuildContext context) {
-    const darkRed = Color.fromARGB(255, 44, 4, 4);
     final visibleItems = data.take(_currentMax).toList();
 
     return Scaffold(
-      appBar: const Header(title: 'Wikipedia'),
       drawer: const Sidebar(),
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/home/home_dark_street.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
+      body: Stack(
+        children: [
+          // Fondo con imagen oscura
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/home/group.jpg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
+              ),
+            ),
           ),
-        ),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 900),
-                  child: const Column(
+          // Contenido scrollable
+          CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              // Menú hamburguesa manual
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40, left: 16),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Builder(
+                      builder: (context) => IconButton(
+                        icon: const Icon(Icons.menu, color: Colors.white),
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Título y descripción
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 900),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Personajes',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.cinzelDecorative(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Vista previa de los personajes del mundo de Hostis Aeternus. '
+                          'Explora sus niveles, historias y apariciones dentro del juego.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.roboto(
+                            color: Colors.grey[300],
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Encima del grid de personajes
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Personajes',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
+                      ElevatedButton.icon(
+                        onPressed: () {}, // TODO: abrir filtros
+                        icon: const Icon(
+                          Icons.filter_list,
                           color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
+                        ),
+                        label: Text(
+                          "Filtrar",
+                          style: GoogleFonts.roboto(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 80, 4, 8),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Vista previa de los personajes del mundo de Shadow Of Mind. '
-                        'Explora sus niveles, historias y apariciones dentro del juego.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey),
+                      const SizedBox(width: 20),
+                      ElevatedButton.icon(
+                        onPressed: () {}, // TODO: mostrar favoritos
+                        icon: const Icon(Icons.favorite, color: Colors.white),
+                        label: Text(
+                          "Favoritos",
+                          style: GoogleFonts.roboto(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                        ),
                       ),
-                      SizedBox(height: 24),
                     ],
                   ),
                 ),
               ),
-            ),
 
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverLayoutBuilder(
-                builder: (context, constraints) {
-                  const crossAxisCount = 2; // como pediste
-                  const cardHeight = 250.0;
-                  final gridDelegate =
-                      SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio:
-                            (constraints.crossAxisExtent / crossAxisCount) /
-                            cardHeight,
-                      );
+              // Grid de personajes
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverLayoutBuilder(
+                  builder: (context, constraints) {
+                    const crossAxisCount = 2;
+                    const cardHeight = 250.0;
+                    final gridDelegate =
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio:
+                              (constraints.crossAxisExtent / crossAxisCount) /
+                              cardHeight,
+                        );
 
-                  return SliverGrid(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final item = visibleItems[index];
-                      return _CharacterCard(
-                        name: item['name'],
-                        level: item['level'],
-                        image: item['image'],
-                        onTap: () => _openCharacterModal(item),
-                      );
-                    }, childCount: visibleItems.length),
-                    gridDelegate: gridDelegate,
-                  );
-                },
-              ),
-            ),
-
-            if (_isLoadingMore)
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Center(child: CircularProgressIndicator()),
+                    return SliverGrid(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final item = visibleItems[index];
+                        return _CharacterCard(
+                          name: item['name'],
+                          level: item['level'],
+                          image: item['image'],
+                          onTap: () => _openCharacterModal(item),
+                        );
+                      }, childCount: visibleItems.length),
+                      gridDelegate: gridDelegate,
+                    );
+                  },
                 ),
               ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: darkRed,
-        onPressed: () {},
-        label: const Text('Filtrar'),
-        icon: const Icon(Icons.filter_list),
+
+              // Loader
+              if (_isLoadingMore)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            ],
+          ),
+        ],
       ),
     );
   }

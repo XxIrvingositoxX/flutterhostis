@@ -1,10 +1,13 @@
 // lib/web/components/sidebar.dart
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_game_app/web/components/header.dart';
 import 'package:flutter_game_app/web/views/chat_bot_view.dart';
-import 'package:flutter_game_app/web/views/home_view.dart';
-import 'package:flutter_game_app/web/views/secret_codes_view.dart';
+import 'package:flutter_game_app/web/views/home_view.dart' as home_view;
+import 'package:flutter_game_app/web/views/secret_codes_view.dart'
+    as secret_codes_view;
 import 'package:flutter_game_app/web/views/wikipedia_view.dart';
+import 'package:flutter_game_app/web/views/downloadpage.dart' as download_view;
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -31,14 +34,18 @@ class _SidebarState extends State<Sidebar> {
         children: [
           SizedBox(
             height: 50,
-            child: const DrawerHeader(
+            child: DrawerHeader(
               margin: EdgeInsets.zero,
               padding: EdgeInsets.zero,
               decoration: BoxDecoration(color: Color.fromARGB(255, 44, 4, 4)),
               child: Center(
                 child: Text(
                   'Shadow Of Mind',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: GoogleFonts.cinzelDecorative(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -56,7 +63,9 @@ class _SidebarState extends State<Sidebar> {
                 builder: (context) => Header(title: 'Home'),
               );
               Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (context) => const HomeView()),
+                MaterialPageRoute<void>(
+                  builder: (context) => home_view.HomeView(),
+                ),
               );
             },
           ),
@@ -74,7 +83,9 @@ class _SidebarState extends State<Sidebar> {
                 builder: (context) => Header(title: 'Wikipedia'),
               );
               Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (context) => const WikipediaView()),
+                MaterialPageRoute<void>(
+                  builder: (context) => const WikipediaView(),
+                ),
               );
             },
           ),
@@ -87,6 +98,11 @@ class _SidebarState extends State<Sidebar> {
               Navigator.pop(context);
               MaterialPageRoute<void>(
                 builder: (context) => Header(title: 'Download'),
+              );
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => download_view.DownloadView(),
+                ),
               );
             },
           ),
@@ -117,7 +133,8 @@ class _SidebarState extends State<Sidebar> {
               );
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (context) => const SecretCodesView(),
+                  builder: (context) =>
+                      const secret_codes_view.SecretCodesView(),
                 ),
               );
             },
